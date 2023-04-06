@@ -2,7 +2,7 @@ html{height: 100%; padding:0; margin:0;
     height: calc(100% - 8rem);}
 /* *{border: 1px solid red;} */
 p.unselectable {
-    all: none;
+    all: unset;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -25,6 +25,8 @@ p.unselectable {
 .card{
     position: absolute;
     background: #fff;
+    margin-left: -5px;
+    display: block;
 }
 .deck{
     border-color: #00f5;
@@ -56,6 +58,11 @@ section{
     justify-self: start;
 }
 
+#sd1 > .card{
+    display: inline;
+    position:relative
+}
+
 #piles{
     grid-area: piles;
     justify-self: end;
@@ -66,7 +73,8 @@ section{
     justify-self: center;
 }
 
-.card[data-suit="♠"]{border-color: #000;}
-.card[data-suit="♣"]{border-color: #000;}
-.card[data-suit="♦"]{border-color: #f00;}
-.card[data-suit="♥"]{border-color: #f00;} 
+.card[data-suit="♠"]{color:#000;border-color: #000;}
+.card[data-suit="♣"]{color:#000;border-color: #000;}
+.card[data-suit="♦"]{color:#f00;border-color: #f00;}
+.card[data-suit="♥"]{color:#f00;border-color: #f00;} 
+
