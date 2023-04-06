@@ -1,5 +1,7 @@
 const values = ["A", "2", "3","4", "5", "6", "7","8", "9", "10", "J","Q", "K"];
 const suits = ["♠", "♣", "♦", "♥"];
+const stuckdeck = document.querySelector("#stuck-deck");
+const dealtdeck = document.querySelector("#dealt-deck");
 
 // Create Deck
 let deck = new Array();
@@ -17,7 +19,7 @@ function shuffle(deck){
   let newDeck = new Array(deck.length);
   newDeck.fill(0);
   for(let card of deck){
-    let spot = Math.floor(Math.random() * (deck.length-1));
+    let spot = Math.floor(Math.random() * deck.length);
     while(newDeck[spot]){ 
       // if the newDeck[spot] has a value, then generate a new spot
       // I would like to make this better, but computers are fast enough
@@ -25,6 +27,8 @@ function shuffle(deck){
     }
     newDeck[spot] = card;
   }
+  console.log("NEW DECK")
+  console.log(newDeck)
   return newDeck;
 }
 console.log("SHUFFLED DECK")
@@ -32,16 +36,71 @@ console.log(deck)
 
 
 // Deal Cards
-const stuckdeck = document.querySelector("#stuck-deck");
-deck.forEach(card => {console.log(card);stuckdeck.appendChild(card)})
-console.log("CARDS DEALT TO STUCK DECK")
+deck.forEach(card => {console.log(card);stuckdeck.appendChild(card)});
+console.log("CARDS DEALT TO STUCK DECK");
 
 // Deal to other decks
 
+dealToColumns()
+function dealToColumns(){
+  // Deal one facedown card to each column if the current number <= facedown number
+  let cards = stuckdeck.querySelectorAll(".card");
+  let columnDecks = document.querySelectorAll("#columns > .deck");
+  let currentCard = cards.length - 1;
+
+  // Then deal successive cards to the bottom of the pile
+  
+  for(let deck of columnDecks){
+    let facedowns = parseInt(deck.dataset.facedowns);
+    let count = 0;
+    while(count < facedowns + 1){
+      count++;
+      let topCard = cards[currentCard];
+      currentCard--;
+      lastElement(deck).appendChild(topCard);
+      let foundBottom = false;
+      let checkedCard = deck;
+    }
+
+    console.log("CARDS DEALT TO COLUMNS");
+    
+    console.log("FLIPPING BOTTOM CARDS");
+    lastElement(deck).dataset.facedown = false;
+  }
+  
+  // I need a method for getting the bottom card in a stack
+  // I need a method for getting the top card in a run
+}
+
+function lastElement(element){
+  /**
+   * May need to rewrite this.
+   * I think using QuerySelector might be better.
+   */
+  // I could be given any element
+  // If the element is a deck then check that it has nodes
+  let type = element.dataset.type;
+  let count = element.childElementCount;
+  // console.log({element,type,count,element.childNodes})
+  if(type == "deck"){
+    if(count == 0){
+      return element;
+    } else {
+      return lastElement(element.lastElementChild)
+    }
+  } else if(type == "card"){
+    if(count > 1){
+      return lastElement(element.lastElementChild);
+    } else {
+      return element;
+    }
+  } else {
+    console.error("Last Element Not Given A Card Or Deck");
+  }
+}
+
+
 const cards = document.querySelectorAll(".card");
-
-
-
 const decks = document.querySelectorAll(".deck");
 let dragged = null;
 
@@ -58,14 +117,22 @@ function dragstart(event){
   deck.addEventListener("drop", drop);
 })
 
+
+
+
 function preventDefault(event){
   event.preventDefault();
 }
 
+
 function drop(event){
   // drop on a card?
-
-  // drop on an empty space?
+  // drop on a deck?
+  /// empty space
+  /// occupied
+  /// piles
+  //// I should be able to bubble update events up.
+  //// So when I pick a card I should be able to tell parent cards to flip if they have no more child cards
 
   if(event.target.className == "deck" || event.target.className == "card"){
     console.log(event);
@@ -83,7 +150,9 @@ function Card(suit, value){
   p.appendChild(text);
   card.appendChild(p)
   card.dataset.suit = suit;
-  card.dataset.value = value
+  card.dataset.value = value;
+  card.dataset.facedown = true;
+  card.dataset.type = "card";
   card.draggable = true;
   return card;
 }
@@ -101,3 +170,21 @@ function Card(suit, value){
 /**
  * Logic:
  */
+
+
+stuckdeck.addEventListener("click", event=>{
+  console.log("CLICKED STUCK DECK")
+  let cards = stuckdeck.querySelectorAll(".card");
+  console.log(cards)
+  if(cards.length){
+    let topCard = cards[cards.length - 1];
+    topCard.dataset.facedown = false;
+    dealtdeck.appendChild(topCard);
+  } else {
+    cards = dealtdeck.querySelectorAll(".card")
+    for(let index = cards.length - 1; index >= 0; index-- ){
+      cards[index].dataset.facedown = true;
+      stuckdeck.appendChild(cards[index]);
+    }
+  }
+})

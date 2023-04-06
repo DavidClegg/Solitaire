@@ -53,14 +53,9 @@ section{
     gap: 3rem;
     height: 131px;
 }
-#stuck-deck{
+#stuck-decks{
     grid-area: stuck;
     justify-self: start;
-}
-
-#sd1 > .card{
-    display: inline;
-    position:relative
 }
 
 #piles{
@@ -78,3 +73,8 @@ section{
 .card[data-suit="♦"]{color:#f00;border-color: #f00;}
 .card[data-suit="♥"]{color:#f00;border-color: #f00;} 
 
+.card[data-facedown = "true"]{
+    border-color: black;
+    color: #0000;
+    background: red;
+}

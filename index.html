@@ -8,27 +8,27 @@
     <title>Document</title>
 </head>
 <body>
-    <section id="stuck-deck">
-        <div id="sd1" class="deck">
-            <div class="card" draggable="true"><p class="unselectable">7 ♣</p></div>
-            <div class="card" draggable="true"><p class="unselectable">7 ♠</p></div>
+    <section id="stuck-decks">
+        <div id="stuck-deck" class="deck" data-type="deck">
+            <!-- <div class="card" draggable="true"><p class="unselectable">7 ♣</p></div> -->
+            <!-- <div class="card" draggable="true"><p class="unselectable">7 ♠</p></div> -->
         </div>
-        <div id="sd2" class="deck"></div>
+        <div id="dealt-deck" class="deck" data-type="deck"></div>
     </section>
     <section id="piles">
-        <div class="deck"></div>
-        <div class="deck"></div>
-        <div class="deck"></div>
-        <div class="deck"></div>
+        <div class="deck" data-pilesuit="null" data-type="deck"></div>
+        <div class="deck" data-pilesuit="null" data-type="deck"></div>
+        <div class="deck" data-pilesuit="null" data-type="deck"></div>
+        <div class="deck" data-pilesuit="null" data-type="deck"></div>
     </section>
     <section id="columns">
-        <div class="deck" data-facedown="0"></div>
-        <div class="deck" data-facedown="1"></div>
-        <div class="deck" data-facedown="2"></div>
-        <div class="deck" data-facedown="3"></div>
-        <div class="deck" data-facedown="4"></div>
-        <div class="deck" data-facedown="5"></div>
-        <div class="deck" data-facedown="6"></div>
+        <div class="deck" data-facedowns="0" data-type="deck"></div>
+        <div class="deck" data-facedowns="1" data-type="deck"></div>
+        <div class="deck" data-facedowns="2" data-type="deck"></div>
+        <div class="deck" data-facedowns="3" data-type="deck"></div>
+        <div class="deck" data-facedowns="4" data-type="deck"></div>
+        <div class="deck" data-facedowns="5" data-type="deck"></div>
+        <div class="deck" data-facedowns="6" data-type="deck"></div>
     </section>
     
 </body>
