@@ -134,8 +134,24 @@ function drop(event){
   //// I should be able to bubble update events up.
   //// So when I pick a card I should be able to tell parent cards to flip if they have no more child cards
 
+  //// `this` is the deck
+  //// I can always get the deck, and so the bottom card, or check the suit and cards on a pile
+  //// And it means I can give the columns a different stacking rule to the piles
+  //console.log(this)
+  if(event.target.dataset.suit == dragged.dataset.suit){// && this.dataset.value == dragged.dataset.value){
+    // This works to check if the dragged node is the same as the target
+    // but to check if it's a parent I should go up the node tree,
+    /// If I reach this node up the tree then stop
+    console.log("SAME")
+    return
+  }
+
   if(event.target.className == "deck" || event.target.className == "card"){
     console.log(event);
+
+    console.log(event.target);
+
+    console.log(dragged)
     dragged.parentNode.removeChild(dragged);
     event.target.appendChild(dragged);
   }
@@ -188,3 +204,14 @@ stuckdeck.addEventListener("click", event=>{
     }
   }
 })
+
+
+/**TODO:
+ *  Facedown cards should be draggable
+ *  There should be rules for which cards can be placed on which
+ *    (Black~Red in decending order on columns, Suit-specific in ascending order on piles)
+ *  Cards need to be placed on the piles as children of the pile, and taken off in order
+ *  Need a fix for parents being placed on children and getting deleted
+ *  Need to handle runs properly
+ *  Need to flip cards if a facedown card is the bottom mode card
+ */
