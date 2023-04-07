@@ -1,5 +1,6 @@
 'use strict'
 
+let DEBUG = false;
 const values = ["A", "2", "3","4", "5", "6", "7","8", "9", "10", "J","Q", "K"];
 const suits = ["♠", "♣", "♦", "♥"];
 const stuckdeck = document.querySelector("#stuck-deck");
@@ -68,9 +69,6 @@ function dealToColumns(){
     lastElement(deck).draggable = true;
     lastElement(deck).dataset.facedown = false;
   }
-  
-  // I need a method for getting the bottom card in a stack
-  // I need a method for getting the top card in a run
 }
 
 function lastElement(element){
@@ -204,6 +202,7 @@ function drop(event){
     if(type  == "card" ){
       let indexOfDragged = values.indexOf(dragged.dataset.value);
       let indexOfTarget = values.indexOf(target.dataset.value);
+      if(!DEBUG){
         if((indexOfTarget - 1 == indexOfDragged)){    
           // Check descending value
           if(dragged.dataset.colour != target.dataset.colour){
@@ -212,7 +211,7 @@ function drop(event){
         } else {
           console.log(`Can't put ${dragged.dataset.value} on ${target.dataset.value}. Try dragging a ${values[indexOfTarget - 1]}`)
         }
-      
+      } else {lastElement(target).appendChild(dragged);}
     }
   }
 
@@ -225,12 +224,20 @@ function drop(event){
       bottomCard.draggable = true;
   }})
 
+  let completedPiles = 0;
   pileDecks.forEach(deck=>{
     if(deck.childElementCount == 0){
       deck.dataset.pilesuit = null;
     }
-  })
-}
+    if(deck.lastElementChild.dataset.value == "K"){
+      completedPiles++
+    }
+  });
+  console.log("Completed Piles: "+completedPiles);
+  if(completedPiles == 3){
+    victory();
+  }
+};
 
 function Card(suit, value){
   let card = document.createElement("div");
@@ -292,3 +299,9 @@ stuckdeck.addEventListener("click", event=>{
 /**TODO:
  *  Need to handle runs properly
  */
+
+//test(document.querySelectorAll(".card"))
+
+function victory(){
+  console.log("--VICTORY")
+}
