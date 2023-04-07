@@ -1,3 +1,5 @@
+'use strict'
+
 const values = ["A", "2", "3","4", "5", "6", "7","8", "9", "10", "J","Q", "K"];
 const suits = ["♠", "♣", "♦", "♥"];
 const stuckdeck = document.querySelector("#stuck-deck");
@@ -58,13 +60,12 @@ function dealToColumns(){
       let topCard = cards[currentCard];
       currentCard--;
       lastElement(deck).appendChild(topCard);
-      let foundBottom = false;
-      let checkedCard = deck;
     }
 
     console.log("CARDS DEALT TO COLUMNS");
     
     console.log("FLIPPING BOTTOM CARDS");
+    lastElement(deck).draggable = true;
     lastElement(deck).dataset.facedown = false;
   }
   
@@ -102,6 +103,8 @@ function lastElement(element){
 
 const cards = document.querySelectorAll(".card");
 const decks = document.querySelectorAll(".deck");
+const columnDecks = document.querySelectorAll("#columns > .deck");
+const pileDecks = document.querySelectorAll("#piles > .deck");
 let dragged = null;
 
 [...cards].forEach(card=>{
@@ -126,6 +129,7 @@ function preventDefault(event){
 
 
 function drop(event){
+  let target = event.target;
   // drop on a card?
   // drop on a deck?
   /// empty space
@@ -138,23 +142,94 @@ function drop(event){
   //// I can always get the deck, and so the bottom card, or check the suit and cards on a pile
   //// And it means I can give the columns a different stacking rule to the piles
   //console.log(this)
-  if(event.target.dataset.suit == dragged.dataset.suit){// && this.dataset.value == dragged.dataset.value){
+  if(target.dataset.suit == dragged.dataset.suit && target.dataset.value == dragged.dataset.value){
     // This works to check if the dragged node is the same as the target
     // but to check if it's a parent I should go up the node tree,
     /// If I reach this node up the tree then stop
     console.log("SAME")
     return
   }
-
-  if(event.target.className == "deck" || event.target.className == "card"){
-    console.log(event);
-
-    console.log(event.target);
-
-    console.log(dragged)
-    dragged.parentNode.removeChild(dragged);
-    event.target.appendChild(dragged);
+  
+  
+  console.log("profiling drop")
+  console.log("target")
+  console.log(target)
+  console.log("deck : this")
+  console.log(this)
+  if(target.nodeName == "P"){
+    target = target.parentNode;
   }
+  let type = target.dataset.type;
+
+  if(this.parentNode.id == "stuck-decks"){
+    console.log("Tried to put a card on a stuck deck")
+    return
+  }
+
+  if(this.parentNode.id == "piles"){
+    let thisSuit = this.dataset.pilesuit;
+    let cardSuit = dragged.dataset.suit;
+    if(dragged.childElementCount > 1){
+      // if there's more than a text node
+      console.log("Can't put more than one card on a suit pile")
+      return
+    }
+    console.log(thisSuit)
+    if(thisSuit != "null"){
+      console.log("Has a suit")
+      if(thisSuit == cardSuit){
+        // check that the card is the next increment
+        console.log(values.indexOf(dragged.dataset.value))
+        console.log(values.indexOf(target.dataset.value))
+        if(values.indexOf(target.dataset.value) + 1 == values.indexOf(dragged.dataset.value) ){
+          this.appendChild(dragged);    
+        }
+      }
+    } else {
+      // check that the card is an ace
+      console.log("No suit")
+      if(dragged.dataset.value == "A"){
+        this.dataset.pilesuit = cardSuit;
+        this.appendChild(dragged);           
+      }
+    }
+  }
+
+  if(this.parentNode.id == "columns"){
+    if(type == "deck" ){
+      if(target.childElementCount == 0){
+        target.appendChild(dragged);      
+      }
+    }
+    if(type  == "card" ){
+      let indexOfDragged = values.indexOf(dragged.dataset.value);
+      let indexOfTarget = values.indexOf(target.dataset.value);
+        if((indexOfTarget - 1 == indexOfDragged)){    
+          // Check descending value
+          if(dragged.dataset.colour != target.dataset.colour){
+            lastElement(target).appendChild(dragged);
+          }
+        } else {
+          console.log(`Can't put ${dragged.dataset.value} on ${target.dataset.value}. Try dragging a ${values[indexOfTarget - 1]}`)
+        }
+      
+    }
+  }
+
+  // Checking bottom cards to flip
+  [...columnDecks].forEach(deck => {
+    let bottomCard = lastElement(deck);
+    if(bottomCard.dataset.facedown == "true"){
+      console.log("Flip")
+      bottomCard.dataset.facedown = "false";
+      bottomCard.draggable = true;
+  }})
+
+  pileDecks.forEach(deck=>{
+    if(deck.childElementCount == 0){
+      deck.dataset.pilesuit = null;
+    }
+  })
 }
 
 function Card(suit, value){
@@ -166,10 +241,16 @@ function Card(suit, value){
   p.appendChild(text);
   card.appendChild(p)
   card.dataset.suit = suit;
+  switch(suit){
+    case "♠": card.dataset.colour = "black";break;
+    case "♣": card.dataset.colour = "black";break;
+    case "♦": card.dataset.colour = "red";break;
+    case "♥": card.dataset.colour = "red";break;
+  }
   card.dataset.value = value;
   card.dataset.facedown = true;
   card.dataset.type = "card";
-  card.draggable = true;
+  card.draggable = false;
   return card;
 }
 
@@ -195,11 +276,13 @@ stuckdeck.addEventListener("click", event=>{
   if(cards.length){
     let topCard = cards[cards.length - 1];
     topCard.dataset.facedown = false;
+    topCard.draggable = true;
     dealtdeck.appendChild(topCard);
   } else {
     cards = dealtdeck.querySelectorAll(".card")
     for(let index = cards.length - 1; index >= 0; index-- ){
       cards[index].dataset.facedown = true;
+      cards[index].draggable = false;
       stuckdeck.appendChild(cards[index]);
     }
   }
@@ -207,11 +290,5 @@ stuckdeck.addEventListener("click", event=>{
 
 
 /**TODO:
- *  Facedown cards should be draggable
- *  There should be rules for which cards can be placed on which
- *    (Black~Red in decending order on columns, Suit-specific in ascending order on piles)
- *  Cards need to be placed on the piles as children of the pile, and taken off in order
- *  Need a fix for parents being placed on children and getting deleted
  *  Need to handle runs properly
- *  Need to flip cards if a facedown card is the bottom mode card
  */

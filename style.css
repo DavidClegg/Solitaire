@@ -1,4 +1,6 @@
-html{height: 100%; padding:0; margin:0;
+*{--cursor: default;}
+
+html{cursor:var(--cursor); height: 100%; padding:0; margin:0;
     height: calc(100% - 8rem);}
 /* *{border: 1px solid red;} */
 p.unselectable {
@@ -21,15 +23,17 @@ p.unselectable {
     aspect-ratio: 2.74 / 3;
     width: 80px;
     height: 120px;
-    border: 5px solid #0000;
+    border: 3px solid #0000;
+    border-radius: 5px;
 }
 .card{
     width: 80px;
     height: 120px;
     position: absolute;
     background: #fff;
-    margin-left: -5px;
+    margin-left: -3px;
     display: block;
+    margin-top: -20px;
 }
 .deck{
     border-color: #00f5;
@@ -37,6 +41,7 @@ p.unselectable {
     display: flex;
     align-items: center;
     justify-items: center;
+    padding-top: 30px;
 }
 
 body{
@@ -80,4 +85,11 @@ section{
     border-color: black;
     color: #0000;
     background: linear-gradient(120deg, #d53369 0%, #daaf51 100%);
+    cursor: default;
+}
+#stuck-deck > .card[data-facedown = "true"]{  
+    cursor: pointer;
+}
+.card[data-facedown = "false"]{
+    cursor: grab;
 }
