@@ -234,7 +234,7 @@ function drop(event){
     }
   });
   console.log("Completed Piles: "+completedPiles);
-  if(completedPiles == 3){
+  if(completedPiles == 4){
     victory();
   }
 };
