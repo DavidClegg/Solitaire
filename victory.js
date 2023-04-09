@@ -86,6 +86,7 @@ class ActiveCard{
                 this.flag = false;
                 if(this.lastCard){
                     // SOMETHING AS A FLAIR
+                    document.querySelector("#afterEffect").style.display = "flex"
                 }
             }
         }
@@ -109,8 +110,13 @@ class ActiveCard{
     }
 }
 
-
-
+let count = 0;
+document.querySelector("#afterEffect").addEventListener("animationiteration", ()=>{
+    count++
+    if(count == 2){
+        document.querySelector("#reset").style.display = "block"
+    }
+})
 
 
 // let timeout = 1000;
