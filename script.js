@@ -73,12 +73,6 @@ function dealToColumns(){
 }
 
 function lastElement(element){
-  /**
-   * May need to rewrite this.
-   * I think using QuerySelector might be better.
-   */
-  // I could be given any element
-  // If the element is a deck then check that it has nodes
   let type = element.dataset.type;
   let count = element.childElementCount;
   // console.log({element,type,count,element.childNodes})
@@ -129,22 +123,7 @@ function preventDefault(event){
 
 function drop(event){
   let target = event.target;
-  // drop on a card?
-  // drop on a deck?
-  /// empty space
-  /// occupied
-  /// piles
-  //// I should be able to bubble update events up.
-  //// So when I pick a card I should be able to tell parent cards to flip if they have no more child cards
-
-  //// `this` is the deck
-  //// I can always get the deck, and so the bottom card, or check the suit and cards on a pile
-  //// And it means I can give the columns a different stacking rule to the piles
-  //console.log(this)
   if(target.dataset.suit == dragged.dataset.suit && target.dataset.value == dragged.dataset.value){
-    // This works to check if the dragged node is the same as the target
-    // but to check if it's a parent I should go up the node tree,
-    /// If I reach this node up the tree then stop
     console.log("SAME")
     return
   }
@@ -261,21 +240,6 @@ function Card(suit, value){
   card.draggable = false;
   return card;
 }
-
-
-
-// Initialise
-// Create Field
-// Add deck events
-
-// Create the deck
-// Deal the cards
-// Add card events
-
-/**
- * Logic:
- */
-
 
 stuckdeck.addEventListener("click", event=>{
   console.log("CLICKED STUCK DECK")
