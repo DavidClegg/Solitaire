@@ -16,7 +16,8 @@ for(let suit = 0; suit < suits.length; suit++){
 console.log("CREATED DECK")
 console.log(deck)
 // Shuffle
-deck = shuffle(deck);
+// deck = shuffle(deck);
+// deck = deck.reverse();console.log("USING THE REVERSED DECK")
 
 function shuffle(deck){
   let newDeck = new Array(deck.length);
@@ -214,7 +215,7 @@ function drop(event){
   });
   console.log("Completed Piles: "+completedPiles);
   if(completedPiles == 4){
-    victory();
+    victory(); // This is from the victory.js file
   }
 };
 
@@ -258,7 +259,3 @@ stuckdeck.addEventListener("click", event=>{
     }
   }
 })
-
-function victory(){
-  console.log("--VICTORY")
-}
