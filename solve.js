@@ -29,4 +29,4 @@ function solve(){
     let extraSpace = document.querySelectorAll("#columns .deck")[4];
     extraSpace.appendChild(clubs[11]);
 }
-solve();
+//solve();
