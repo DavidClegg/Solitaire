@@ -20,6 +20,6 @@ Below the foundation piles, you can move cards from one column to another. Cards
 
 You can also move sequential runs of cards between columns. Just tap the deepest card in the run and drag them all to another column.
 
-If you ever have an empty column, you can place a king there or any sequential stack with a king at its head.
+If you ever have an empty column, you can place any card or any sequential stack there.
 
 If you get stuck, tap the deck in the upper-left corner to draw more cards. If you exhaust the deck, you can deal it again by tapping the empty deck space.
