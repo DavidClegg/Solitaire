@@ -11,6 +11,7 @@ let floor = 600;
 let rightWall;
 let gravity;
 let maxSpeed = 100;
+let animateFlag = true;
 
 function victory(){
     console.log("++++ VICTORY ++++")
@@ -48,7 +49,9 @@ function victory(){
             keyTime = time;
         }
         //if(time > 10000){return}
-        requestAnimationFrame(animate);
+        if(animateFlag){
+            requestAnimationFrame(animate);
+        }
     }
     requestAnimationFrame(animate);
 }
@@ -87,6 +90,7 @@ class ActiveCard{
                 if(this.lastCard){
                     // SOMETHING AS A FLAIR
                     document.querySelector("#afterEffect").style.display = "flex"
+                    animateFlag = false
                 }
             }
         }

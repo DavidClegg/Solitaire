@@ -16,7 +16,7 @@ for(let suit = 0; suit < suits.length; suit++){
 console.log("CREATED DECK")
 console.log(deck)
 // Shuffle
-// deck = shuffle(deck);
+deck = shuffle(deck);
 // deck = deck.reverse();console.log("USING THE REVERSED DECK")
 
 function shuffle(deck){
